@@ -2,8 +2,14 @@ from pathlib import Path
 import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'replace-me-with-a-secure-key'
-DEBUG = False
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    'nithya.pythonanywhere.com',
+    
+]
+debug=False
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
