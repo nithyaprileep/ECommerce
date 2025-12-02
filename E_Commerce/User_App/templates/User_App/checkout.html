@@ -1,0 +1,88 @@
+{% extends "User_App/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .checkout-container{
+        max-width:900px;margin:auto;padding:25px;
+        background:rgb(244, 149, 149);border-radius:12px;
+        box-shadow:0 4px 15px rgba(0,0,0,0.1);
+        margin-top:30px;margin-bottom:30px;
+    }
+    .checkout-title{
+        font-size:30px;font-weight:700;text-align:center;margin-bottom:25px;
+    }
+    .section-title{
+        font-size:20px;font-weight:600;margin-bottom:15px;border-left:4px solid #16a34a;
+        padding-left:10px;
+    }
+    .summary-table{width:100%;border-collapse:collapse;margin-top:15px;}
+    .summary-table th,.summary-table td{
+        padding:12px;border-bottom:1px solid #f2aaaa;text-align:left;
+    }
+    .summary-table th{background:#819dda;font-weight:600;}
+    .total-box{text-align:right;margin-top:25px;font-size:22px;font-weight:700;}
+    .user-box{
+        background:#7eb6ef;padding:15px;border-radius:10px;margin-bottom:25px;
+        border:1px solid #e5e7eb;
+    }
+    .checkout-btn{
+        background:#16a34a;color:white;padding:12px 20px;border-radius:10px;
+        display:block;text-align:center;font-size:18px;font-weight:600;
+        text-decoration:none;margin-top:20px;
+    }
+    .checkout-btn:hover{background:#0f8a3c;}
+</style>
+
+<div class="checkout-container">
+
+    <div class="checkout-title">Checkout</div>
+
+    <!-- USER DETAILS -->
+    <div class="section-title">Customer Details</div>
+    <div class="user-box">
+        <p><strong>Name:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        {% if user.userprofile %}
+        <p><strong>Phone:</strong> {{ user.userprofile.phone }}</p>
+        <p><strong>Address:</strong> {{ user.userprofile.address }}</p>
+        {% else %}
+        <p style="color:red;">No profile details found. Please update your profile.</p>
+        {% endif %}
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="section-title">Order Summary</div>
+
+    <table class="summary-table">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹ {{ item.product.price }}</td>
+            <td>₹ {{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- TOTAL -->
+    <div class="total-box">
+        Grand Total: ₹ {{ total }}
+    </div>
+
+    <!-- CHECKOUT BUTTON -->
+    <form method="POST" action="{% url 'User_App:checkout' %}">
+        {% csrf_token %}
+        <button type="submit" class="checkout-btn">Place Order</button>
+    </form>
+
+</div>
+
+{% endblock %}

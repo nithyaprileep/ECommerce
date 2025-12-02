@@ -1,0 +1,15 @@
+{% extends 'Store/base_admin.html' %}
+{% block title %}Edit Product{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">✏️ Edit/Add Product - {{ product.name }}</h2>
+
+<div class="card p-4" style="max-width: 600px;">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-info mt-3">Save Changes</button>
+        <a href="{% url 'Store:admin_product_list' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Success / Error Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <h2 class="mb-4 text-center">🛒 Our Products</h2>
+
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Price (₹)</th>
+                <th>Stock</th>
+                <th width="200px">Add to Cart</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for product in products %}
+            <tr class="align-middle">
+                <td>{{ forloop.counter }}</td>
+
+                <td><strong>{{ product.name }}</strong></td>
+
+                <td>{{ product.description|truncatechars:80 }}</td>
+
+                <td><strong>₹{{ product.price }}</strong></td>
+
+                <td>
+                    {% if product.stock > 0 %}
+                        <span class="badge bg-success">In Stock</span>
+                    {% else %}
+                        <span class="badge bg-danger">Out of Stock</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if product.stock > 0 %}
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}" class="d-flex">
+                        {% csrf_token %}
+                        <input type="number"
+                               name="quantity"
+                               class="form-control form-control-sm me-2"
+                               value="1"
+                               min="1"
+                               max="{{ product.stock }}"
+                               required>
+
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Add
+                        </button>
+                    </form>
+                    {% else %}
+                    <span class="text-muted">Unavailable</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+{% endblock %}
